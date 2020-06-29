@@ -224,7 +224,7 @@ class Astra_WXR_Importer {
 		}
 
 		// Set EXT and real MIME type only for the file name `wpforms.json` or `wpforms-{page-id}.json`.
-		if ( strpos( $filename, 'wpforms' ) !== false ) {
+		if ( ( strpos( $filename, 'wpforms' ) !== false ) || ( strpos( $filename, 'cartflows' ) !== false ) ) {
 			$defaults['ext']  = 'json';
 			$defaults['type'] = 'text/plain';
 		}
@@ -246,6 +246,20 @@ class Astra_WXR_Importer {
 		$data['guid'] = $remote_url;
 
 		return $data;
+	}
+
+	/**
+	 * Enable the WP_Image_Editor_GD library.
+	 *
+	 * @since 2.2.3
+	 * @param  array $editors Image editors library list.
+	 * @return array
+	 */
+	public function enable_wp_image_editor_gd( $editors ) {
+		$gd_editor = 'WP_Image_Editor_GD';
+		$editors   = array_diff( $editors, array( $gd_editor ) );
+		array_unshift( $editors, $gd_editor );
+		return $editors;
 	}
 
 	/**
@@ -301,6 +315,9 @@ class Astra_WXR_Importer {
 			wp_ob_end_flush_all();
 			flush();
 		}
+
+		// Enable default GD library.
+		add_filter( 'wp_image_editors', array( $this, 'enable_wp_image_editor_gd' ) );
 
 		// Change GUID image URL.
 		add_filter( 'wxr_importer.pre_process.post', array( $this, 'fix_image_duplicate_issue' ), 10, 4 );

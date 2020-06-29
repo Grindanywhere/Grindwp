@@ -54,9 +54,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<div id="ast-sites-floating-notice-wrap-id" class="ast-sites-floating-notice-wrap"><div class="ast-sites-floating-notice"></div></div>
 				<?php
-				$manual_sync = get_option( 'astra-sites-manual-sync-complete', 'no' );
+				$manual_sync = get_site_option( 'astra-sites-manual-sync-complete', 'no' );
 				if ( 'yes' === $manual_sync ) {
-					$batch_status = get_option( 'astra-sites-batch-is-complete', 'no' );
+					$batch_status = get_site_option( 'astra-sites-batch-is-complete', 'no' );
 					if ( 'yes' === $batch_status ) {
 						?>
 						<div class="ast-sites-floating-notice-wrap refreshed-notice slide-in">
@@ -211,7 +211,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="astra-sites-library-template astra-theme" data-block-id={{key}}>
 			<div class="astra-sites-library-template-inner" >
 				<div class="elementor-template-library-template-body theme-screenshot" data-step="1">
-					<img src="{{data[ key ]['featured-image-url']}}">
+					<img src="{{data[ key ]['thumbnail-image-url']}}">
 					<div class="elementor-template-library-template-preview">
 						<i class="eicon-zoom-in" aria-hidden="true"></i>
 					</div>
@@ -429,33 +429,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<span class="elementor-button-title"><?php esc_html_e( 'Insert', 'astra-sites' ); ?></span>
 		</a>
 
-	</div>
-</script>
-
-<?php
-/**
- * TMPL - Update Available Plugins
- */
-?>
-<script type="text/template" id="tmpl-astra-sites-update-available-required-plugins">
-	<div class="skip-and-import">
-		<div class="heading">
-			<h3><?php esc_html_e( 'Update Plugin', 'astra-sites' ); ?></h3>
-			<span class="dashicons close dashicons-no-alt"></span>
-		</div>
-		<div class="astra-sites-import-content">
-			<p><?php esc_html_e( 'Updates are available for plugins used in this starter template.', 'astra-sites' ); ?></p>
-			<p><?php esc_html_e( 'Kindly update them for a successful import. Skipping this step might break the template design/feature.', 'astra-sites' ); ?></p>
-			<ul class="astra-sites-third-party-required-plugins">
-				<# for ( key in data ) { #>
-					<li class="plugin-card plugin-card-{{data[ key ].slug}}'" data-slug="{{data[ key ].slug }}" data-init="{{data[ key ].init}}" data-name="{{data[ key ].name}}">{{data[ key ].name}}</li>
-				<# } #>
-			</ul>
-		</div>
-		<div class="ast-actioms-wrap">
-			<a href="#" class="button button-hero button-primary astra-sites-skip-and-import-step"><?php esc_html_e( 'Skip & Import', 'astra-sites' ); ?></a>
-			<div class="button button-hero site-import-cancel"><?php esc_html_e( 'Cancel', 'astra-sites' ); ?></div>
-		</div>
 	</div>
 </script>
 

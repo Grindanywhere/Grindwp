@@ -4,8 +4,8 @@ Donate link: https://wpastra.com/pro/
 Tags: Elementor,Beaver Builder,Templates,Gutenberg,Astra Starter Sites
 Requires at least: 4.4
 Requires PHP: 5.3
-Tested up to: 5.3
-Stable tag: 2.1.0
+Tested up to: 5.4
+Stable tag: 2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,7 +65,7 @@ You can extend this library with premium ready-to-use website demos by purchasin
 
 = WHY PEOPLE LOVE THE ASTRA THEME? =
 
-Over 700,000+ users are empowering their websites with Astra! From beginners to industry experts, everyone is loving Astra for its performance and ease of use.
+Over 900,000+ users are empowering their websites with Astra! From beginners to industry experts, everyone is loving Astra for its performance and ease of use.
 
 = HERE ARE A FEW REASONS WHY THEY LOVE ASTRA – =
 
@@ -138,7 +138,45 @@ We are open to suggestions and would love to work on topics that our users are l
 
 == Changelog ==
 
-v.2.1.0 - 23-March-2020
+v2.3.1 - 17-June-2020
+- Fix: Fixed the user role and capability issue for WP CLI demo import.
+
+v2.3.0 - 15-June-2020
+- New: Users can now share non-personal usage data to help us test and develop better products.
+
+v2.2.5 - 15-June-2020
+- Improvement: Performance enhancements in order to improve the TTFB (time to first byte).
+- Improvement: Now users can see better error messages (if any) while import.
+- Improvement: Handled the multisite plugin install/activate capability issue for standard administrator user.
+- Fix: Resolved a conflict with Groundhogg plugin.
+- Fix: Resolved a conflict between 3rd party plugins and Pixabay Images.
+- Fix: Fixed latest Brizy page builder related issues.
+- Fix: Fixed the repeated content import issues.
+
+v2.2.4 - 04-May-2020
+- Improvement: Demo data is stored Network Wide for Multisite instance.
+- Improvement: Users can opt-out from Elementor Theme Kit if needed while importing the site.
+- Fix: Double slash for REST endpoint removed.
+- Fix: Changed user permissions for a few actions.
+
+v2.2.3 - 29-April-2020
+- Fix: Handled duplicate data being imported due to Imagick image editor.
+
+v2.2.2 - 22-April-2020
+- Improvement: Added missing slash to the website preview URL.
+- Improvement: Added Elementor Theme Kit Compatibility.
+
+v2.2.1 - 15-April-2020
+- Improvement: Improved the file permissions check functionality.
+
+v2.2.0 - 6-April-2020
+- Improvement: Added an Update Button for un-updated plugin list popup.
+- Improvement: Used text-domain `astra-sites` to make translation ready strings.
+- Improvement: Imported all the hotlink images from Astra theme customizer settings.
+- Improvement: WP 5.4 compatibility issue.
+- Fix: The category not visible in the dropdown list from the Elementor Popup.
+
+v2.1.0 - 23-March-2020
 - New: Added `starter-templates` WP CLI command which is a new alias for WP CLI command  `astra-sites`. We can use either `starter-templates` or `astra-sites`.
 - Improvement: WordFence firewall setting breaks the site content import AJAX request.
 - Improvement: Added WordPress version 4.9 compatibility.

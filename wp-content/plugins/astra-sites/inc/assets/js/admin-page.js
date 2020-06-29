@@ -219,6 +219,7 @@ var AstraSitesAjaxQueue = (function() {
 		options_data    : '',
 		widgets_data    : '',
 		enabled_extensions    : '',
+		elementor_kit_flag : true,
 		action_slug		: '',
 		import_start_time  : '',
 		import_end_time    : '',
@@ -1103,7 +1104,7 @@ var AstraSitesAjaxQueue = (function() {
 			.done(function ( response ) {
 				AstraSitesAdmin._log( response );
 				if( response.success ) {
-					var total = response.data.pages;
+					var total = response.data;
 
 					AstraSitesAdmin._log( total );
 
@@ -1524,7 +1525,8 @@ var AstraSitesAjaxQueue = (function() {
 
 			$( '.site-import-layout-button' ).removeClass( 'disabled' );
 			if( page_name ) {
-				$( '.site-import-layout-button' ).text('Import "'+page_name.trim()+'" Template');
+				var title = astraSitesVars.strings.importSingleTemplate.replace( '%s', page_name.trim() );
+				$( '.site-import-layout-button' ).text( title );
 			}
 
 			if( url ) {
@@ -1900,6 +1902,8 @@ var AstraSitesAjaxQueue = (function() {
 		},
 
 		_start_site_import: function() {
+
+			AstraSitesAdmin.elementor_kit_flag = AstraSitesAdmin._is_elementor_kit_flag();
 			if ( AstraSitesAdmin._is_reset_data() ) {
 				$(document).trigger( 'astra-sites-reset-data' );
 			} else {
@@ -2314,6 +2318,7 @@ var AstraSitesAjaxQueue = (function() {
 						action       : 'astra-sites-import-options',
 						options_data : AstraSitesAdmin.options_data,
 						_ajax_nonce      : astraSitesVars._ajax_nonce,
+						elementor_kit_flag : AstraSitesAdmin.elementor_kit_flag
 					},
 					beforeSend: function() {
 						console.groupCollapsed( 'Importing Options' );
@@ -2428,6 +2433,8 @@ var AstraSitesAjaxQueue = (function() {
 							}
 						};
 						evtSource.onerror = function( error ) {
+							evtSource.close();
+							console.log( error );
 							AstraSitesAdmin._importFailMessage('', 'Import Process Interrupted');
 						};
 						evtSource.addEventListener( 'log', function ( message ) {
@@ -2450,6 +2457,13 @@ var AstraSitesAjaxQueue = (function() {
 
 		_is_reset_data: function() {
 			if ( $( '.astra-sites-reset-data' ).find('.checkbox').is(':checked') ) {
+				return true;
+			}
+			return false;
+		},
+
+		_is_elementor_kit_flag: function() {
+			if ( $( '.astra-sites-import-elementor-kit' ).find('.checkbox').is(':checked') ) {
 				return true;
 			}
 			return false;
@@ -2632,20 +2646,23 @@ var AstraSitesAjaxQueue = (function() {
 		 *
 		 * @param  {string} data Error message.
 		 */
-		_importFailMessage: function( message, heading, jqXHR ) {
+		_importFailMessage: function( message, heading, jqXHR, topContent ) {
 
 			heading = heading || 'The import process interrupted';
 
-			var status_code = jqXHR.status ? parseInt( jqXHR.status ) : parseInt( jqXHR.status ) || '';
+			var status_code = '';
+			if( jqXHR ) {
+				status_code = jqXHR.status ? parseInt( jqXHR.status ) : '';
+			}
 
 			if( 200 == status_code && astraSitesVars.debug ) {
 				var output = astraSitesVars.importFailedMessageDueToDebug;
 
 			} else {
-				var output  = astraSitesVars.importFailedMessage;
+				var output  = topContent || astraSitesVars.importFailedMessage;
 
 				if( message ) {
-					output += '<p class="current-importing-status">Error: ' + message +'</p>';
+					output += '<div class="current-importing-status">Error: ' + message +'</div>';
 				}
 			}
 			
@@ -3234,7 +3251,7 @@ var AstraSitesAjaxQueue = (function() {
 				console.groupEnd();
 
 				if( false === response.success ) {
-					AstraSitesAdmin._importFailMessage( response.data, 'Required Plugins Failed!' );
+					AstraSitesAdmin._importFailMessage( response.data, 'Required Plugins Failed!', '', astraSitesVars.importFailedRequiredPluginsMessage );
 				} else {
 					required_plugins = response.data['required_plugins'];
 
@@ -3595,9 +3612,24 @@ var AstraSitesAjaxQueue = (function() {
 			AstraSitesAdmin.enabled_extensions = JSON.stringify( data['astra-enabled-extensions'] ) || '';
 			AstraSitesAdmin.widgets_data       = data['astra-site-widgets-data'] || '';
 
+			// Elementor Template Kit Markup.
+			AstraSitesAdmin.template_kit_markup( data );
 
 			// Required Plugins.
 			AstraSitesAdmin.required_plugins_list_markup( data['required-plugins'] );
+		},
+
+		template_kit_markup: function( data ) {
+			if ( 'elementor' != astraSitesVars.default_page_builder ) {
+				return;
+			}
+
+			var site_option = data['astra-site-options-data'];
+			if ( ! AstraSitesAdmin.isEmpty( site_option ) && ! AstraSitesAdmin.isEmpty( site_option['elementor_active_kit'] ) ) {
+				$('.astra-sites-result-preview').find('.astra-sites-import-elementor-kit').show();
+			} else {
+				$('.astra-sites-result-preview').find('.astra-sites-import-elementor-kit').hide();
+			}
 		},
 
 		/**
